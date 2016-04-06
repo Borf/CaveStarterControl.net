@@ -179,5 +179,17 @@ namespace CaveStarterControl.net
 			txtWorkingDirectory.Text = listView2.SelectedItems[0].SubItems[3].Text;
 			button1_Click(sender, e);
 		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			var confirmResult = MessageBox.Show("Are you sure to shut the PCs down??",
+												 "Confirm Shutdown!!",
+												 MessageBoxButtons.YesNo);
+
+			if(confirmResult == DialogResult.Yes)
+			{
+				sendCommand("shutdown\r\n");
+			}
+		}
 	}
 }

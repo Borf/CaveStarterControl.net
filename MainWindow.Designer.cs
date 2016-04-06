@@ -43,6 +43,7 @@
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.listView2 = new System.Windows.Forms.ListView();
+			this.button3 = new System.Windows.Forms.Button();
 			this.panel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -217,12 +218,24 @@
 			this.listView2.UseCompatibleStateImageBehavior = false;
 			this.listView2.ItemActivate += new System.EventHandler(this.listView2_ItemActivate);
 			// 
+			// button3
+			// 
+			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button3.Location = new System.Drawing.Point(517, 1);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(75, 23);
+			this.button3.TabIndex = 9;
+			this.button3.Text = "Shutdown";
+			this.button3.UseVisualStyleBackColor = true;
+			this.button3.Click += new System.EventHandler(this.button3_Click);
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(690, 513);
 			this.Controls.Add(this.button2);
+			this.Controls.Add(this.button3);
 			this.Controls.Add(this.tabControl1);
 			this.Name = "MainWindow";
 			this.Text = "Cave Starter";
@@ -254,6 +267,7 @@
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.ListView listView2;
+		private System.Windows.Forms.Button button3;
 	}
 }
 
