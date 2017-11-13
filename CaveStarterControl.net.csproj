@@ -35,6 +35,10 @@
     <ApplicationIcon>cave.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,10 +57,28 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="OAuthWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OAuthWindow.Designer.cs">
+      <DependentUpon>OAuthWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptionWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionWindow.Designer.cs">
+      <DependentUpon>OptionWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OAuthWindow.resx">
+      <DependentUpon>OAuthWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionWindow.resx">
+      <DependentUpon>OptionWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -67,6 +89,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

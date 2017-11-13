@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -15,7 +17,10 @@ namespace CaveStarterControl.net
 	public partial class MainWindow : Form
 	{
 		public const string historyFile = "data/CaveStarter.net/history.txt";
-		public const string simpleFile = "data/CaveStarter.net/simple.txt";
+		public const string simpleFile = "data/CaveStarter.net/simple.json";
+
+		dynamic simpleData;
+		
 
 		public MainWindow()
 		{
@@ -42,38 +47,32 @@ namespace CaveStarterControl.net
 
 
 
-			try
-			{
-				string[] lines = File.ReadAllLines(simpleFile);
+			simpleData = JsonConvert.DeserializeObject(File.ReadAllText(simpleFile));
 
-				ImageList ilist = new ImageList();
-				ilist.ImageSize = new Size(256, 256);
-				ilist.ColorDepth = ColorDepth.Depth24Bit;
-				this.listView2.LargeImageList = ilist;
-				for (int i = 0; i < lines.Length; i+=6 )
-				{
-					Bitmap b = new Bitmap("data/CaveStarter.net/" + lines[i+1]);
-					ilist.Images.Add(b);
-					ListViewItem lvi = new ListViewItem(lines[i]);
-					lvi.ImageIndex = i/6;
-					lvi.SubItems.Add(lines[i + 2]);
-					lvi.SubItems.Add(lines[i + 3]);
-					lvi.SubItems.Add(lines[i + 4]);
-					listView2.Items.Add(lvi);
-				}
-				listView2.Columns.Add("Last Run", 100, HorizontalAlignment.Left);
-				listView2.Columns.Add("Command", 200, HorizontalAlignment.Left);
-				listView2.Columns.Add("Arguments", 200, HorizontalAlignment.Left);
-				listView2.Columns.Add("Directory", 150, HorizontalAlignment.Left);
-			}
-			catch (Exception)
+			ImageList ilist = new ImageList();
+			ilist.ImageSize = new Size(256, 256);
+			ilist.ColorDepth = ColorDepth.Depth24Bit;
+			this.listView2.LargeImageList = ilist;
+			int index = 0;
+			foreach (dynamic launch in simpleData)
 			{
+				Bitmap b = new Bitmap("data/CaveStarter.net/" + (string)launch.icon);
+				ilist.Images.Add(b);
+				ListViewItem lvi = new ListViewItem((string)launch.name);
+				lvi.ImageIndex = index;
+				listView2.Items.Add(lvi);
+				index++;
 			}
+			listView2.Columns.Add("Last Run", 100, HorizontalAlignment.Left);
+			listView2.Columns.Add("Command", 200, HorizontalAlignment.Left);
+			listView2.Columns.Add("Arguments", 200, HorizontalAlignment.Left);
+			listView2.Columns.Add("Directory", 150, HorizontalAlignment.Left);
+
 
 
 			tabControl1.SelectedTab = tabPage2;
 
-
+			configuration.Text = Properties.Settings.Default.lastconfig;
 		}
 
 
@@ -174,10 +173,52 @@ namespace CaveStarterControl.net
 
 		private void listView2_ItemActivate(object sender, EventArgs e)
 		{
-			txtCommand.Text = listView2.SelectedItems[0].SubItems[1].Text;
-			txtArguments.Text = listView2.SelectedItems[0].SubItems[2].Text;
-			txtWorkingDirectory.Text = listView2.SelectedItems[0].SubItems[3].Text;
-			button1_Click(sender, e);
+			dynamic action = simpleData[listView2.SelectedItems[0].ImageIndex];
+			Console.WriteLine(action.name);
+
+			dynamic config = action.configs[configuration.Text];
+			string arguments = config.arguments;
+
+			if (action["options"] != null)
+			{
+				OptionWindow window = new OptionWindow();
+				window.init(action.options);
+				if (window.ShowDialog() == DialogResult.OK)
+				{
+					arguments += " " + window.argument;
+				}
+				else
+					return;
+			}
+
+			if(action["userlogin"] != null && action["userlogin"] == true)
+			{
+				OAuthWindow window = new OAuthWindow();
+				if (window.ShowDialog() == DialogResult.OK)
+				{
+					arguments += " --sessionid " + window.result.sessionid + " --key " + window.result.key;
+				}
+				else
+					return;
+
+			}
+
+
+			if (config["mode"] == "remote")
+			{
+				txtCommand.Text = action.exe;
+				txtArguments.Text = arguments;
+				txtWorkingDirectory.Text = config.path;
+				button1_Click(sender, e);
+			}
+			else
+			{
+				Process process = new Process();
+				process.StartInfo.FileName = (string)action.exe;
+				process.StartInfo.Arguments = arguments;
+				process.Start();
+			}
+
 		}
 
 		private void button3_Click(object sender, EventArgs e)
@@ -190,6 +231,12 @@ namespace CaveStarterControl.net
 			{
 				sendCommand("shutdown\r\n");
 			}
+		}
+
+		private void configuration_TextChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.lastconfig = configuration.Text;
+			Properties.Settings.Default.Save();
 		}
 	}
 }

@@ -45,6 +45,7 @@
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.listView2 = new System.Windows.Forms.ListView();
 			this.button3 = new System.Windows.Forms.Button();
+			this.configuration = new System.Windows.Forms.ComboBox();
 			this.panel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -230,11 +231,27 @@
 			this.button3.UseVisualStyleBackColor = true;
 			this.button3.Click += new System.EventHandler(this.button3_Click);
 			// 
+			// configuration
+			// 
+			this.configuration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.configuration.FormattingEnabled = true;
+			this.configuration.Items.AddRange(new object[] {
+            "cave",
+            "vive",
+            "sim"});
+			this.configuration.Location = new System.Drawing.Point(390, 2);
+			this.configuration.Name = "configuration";
+			this.configuration.Size = new System.Drawing.Size(121, 21);
+			this.configuration.TabIndex = 2;
+			this.configuration.Text = "cave";
+			this.configuration.TextChanged += new System.EventHandler(this.configuration_TextChanged);
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(690, 513);
+			this.Controls.Add(this.configuration);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.tabControl1);
@@ -270,6 +287,7 @@
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.ListView listView2;
 		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.ComboBox configuration;
 	}
 }
 
